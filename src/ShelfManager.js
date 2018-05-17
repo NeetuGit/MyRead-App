@@ -27,8 +27,6 @@ class ShelfManager extends Component {
         });
     }
 
-
-
     render(){
         return(
             <div className="book-shelf-changer">

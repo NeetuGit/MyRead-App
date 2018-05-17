@@ -7,7 +7,7 @@ import BookShelf from './BookShelf';
 import Search from './Search';
 
 class BooksApp extends React.Component {
-   MAX_RESULTS = 30;
+  max_result = 25;
 
   state = {
     books: [],
@@ -39,8 +39,7 @@ class BooksApp extends React.Component {
 
     updateQuery = (query) => {
           if(query){
-              BooksAPI.search(query, this.MAX_RESULTS).then((books) => {
-                  // if the BookAPI.search worked properly, this would be unnecessary
+              BooksAPI.search(query, this.max_result).then((books) => {
                   if(books.length){
                       books.forEach((book, index) => {
                           let myBook = this.state.books.find((b) => b.id === book.id);
