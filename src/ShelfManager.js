@@ -42,7 +42,7 @@ class ShelfManager extends Component {
                     <option value="read">Read</option>
                     <option value="none">None</option>
                 </select>
-                { this.state.updating></div>)}
+                { this.state.updating}
             </div>
         )
     }

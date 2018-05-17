@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-
-import { Debounce } from "throttle-debounce";
+import { Debounce } from 'react-throttle';
 import Book from "./Book";
 
 class Search extends Component{
@@ -16,12 +15,11 @@ class Search extends Component{
     };
 
     componentWillUnmount(){
-        // Reset search query
         this.props.updateQuery("");
     }
 
     render(){
-        return( 
+        return(
             <div className="search-books">
                 <div className="search-books-bar">
                     <Link className="close-search" to="/">Close</Link>
