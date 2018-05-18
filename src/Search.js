@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { Debounce } from 'react-throttle';
 import Book from "./Book";
+import * as BooksAPI from './BooksAPI'
 
 class Search extends Component{
     static propTypes = {
@@ -10,43 +10,70 @@ class Search extends Component{
         changeShelf: PropTypes.func.isRequired
     };
 
-    updateQuery = (query) => {
-        this.props.updateQuery(query.trim());
-    };
+state = {
+    query: '',
+    newBooks: [],
+    searchErr: false
+  }
 
-    componentWillUnmount(){
-        this.props.updateQuery("");
-    }
+  getBooks = (event) => {
 
-    render(){
-        return(
-            <div className="search-books">
-                <div className="search-books-bar">
-                    <Link className="close-search" to="/">Close</Link>
-                    <div className="search-books-input-wrapper">
-                        <Debounce time="800" handler="onChange">
-                            <input
-                                type="text"
-                                placeholder="Search by title or author"
-                                onChange={(event) => this.updateQuery(event.target.value)}
-                            />
-                        </Debounce>
-                    </div>
-                </div>
-                <div className="search-books-results">
-                    <ol className="books-grid">
-                        {this.props.books.map((book) => (
-                            <li key={book.id} className="contact-list-item">
-                                <Book
-                                    book={book}
-                                    changeShelf={this.props.changeShelf} />
-                            </li>
-                        ))}
-                    </ol>
-                </div>
+    const query = event.target.value.trim()
+    this.setState({ query: query })
+
+    // if user input => run the search
+    if (query) {
+      BooksAPI.search(query, 20).then((books) => {
+        books.length > 0 ?  this.setState({newBooks: books, searchErr: false }) : this.setState({ newBooks: [], searchErr: true })
+      })
+
+    // if query is empty => reset state to default
+  } else this.setState({newBooks: [], searchErr: false })
+  }
+
+  render() {
+
+    const { query, newBooks, searchErr } = this.state
+    const { books, changeShelf } = this.props
+
+      return (
+        <div className="search-books">
+          <div className="search-books-bar">
+            <Link className="close-search"  to="/">Close</Link>
+            <div className="search-books-input-wrapper">
+              <input type="text"
+                placeholder="Search by title or author"
+                value={ query }
+                onChange={ this.getBooks } />
             </div>
-        )
-    }
+          </div>
+          <div className="search-books-results">
+            { newBooks.length > 0 && (
+              <div>
+                <div className=''>
+                  <h3>Search returned { newBooks.length } books </h3>
+                </div>
+                <ol className="books-grid">
+                  {newBooks.map((book) => (
+                    <Book
+                      book={ book }
+                      books={ books }
+                      key={ book.id }
+                      changeShelf={ changeShelf }
+                    />
+                  ))}
+                </ol>
+              </div>
+            )}
+            { searchErr  && (
+              <div>
+                <div className=''>
+                  <h3>Search returned 0 books.  Please try again!</h3>
+                  </div>
+                </div>
+            )}
+          </div>
+        </div>
+      )}
 }
-
 export default Search;
