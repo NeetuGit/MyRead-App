@@ -1,6 +1,7 @@
 import React, {Component } from 'react';
 import PropTypes from 'prop-types';
 import ShelfManager from './ShelfManager';
+import noCover from './icons/no-cover-image.png'
 
 class Book extends Component {
   static propTypes = {
@@ -9,17 +10,24 @@ class Book extends Component {
   };
   render(){
     const { book }= this.props;
+    // add fallbacks for missing cover images and title
+  const coverImg = book.imageLinks && book.imageLinks.thumbnail ? book.imageLinks.thumbnail : noCover
+  const title = book.title ? book.title : "No title available"
+
     return(
       <div className="book" id={book.id}>
           <div className="book-top">
-              <div className="book-cover" style={{backgroundImage: `url("${book.imageLinks.thumbnail}")` }}></div>
+              <div className="book-cover" style={{ backgroundImage: `url(${coverImg})`}}></div>
                 <ShelfManager
                     book={book}
                     changeShelf={this.props.changeShelf}
                 />
             </div>
-            <div className="book-title" >{book.name}</div>
-            <div className="book-authers" >{book.authers}</div>
+            <div className="book-title">{title}</div>
+            { /* Check for authors and render each on separate line if exist*/
+              book.authors && book.authors.map((author, index) => (
+                <div className="book-authors" key={index}>{author}</div>
+            ))}
       </div>
     )
   }

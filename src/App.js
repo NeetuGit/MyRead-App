@@ -2,9 +2,9 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
-import './App.css';
 import BookShelf from './BookShelf';
 import Search from './Search';
+import './App.css';
 
 class BooksApp extends React.Component {
   max_result = 25;
@@ -60,6 +60,8 @@ class BooksApp extends React.Component {
       };
 
   render() {
+  
+
     return (
       <div className="app">
                 <Route exact path="/" render={() => (
