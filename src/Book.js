@@ -10,7 +10,7 @@ class Book extends Component {
   };
   render(){
     const { book }= this.props;
-    // add fallbacks for missing cover images and title
+
   const coverImg = book.imageLinks && book.imageLinks.thumbnail ? book.imageLinks.thumbnail : noCover
   const title = book.title ? book.title : "No title available"
 
@@ -24,7 +24,7 @@ class Book extends Component {
                 />
             </div>
             <div className="book-title">{title}</div>
-            { /* Check for authors and render each on separate line if exist*/
+            { 
               book.authors && book.authors.map((author, index) => (
                 <div className="book-authors" key={index}>{author}</div>
             ))}
